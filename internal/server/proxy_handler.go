@@ -7,6 +7,8 @@ import (
 	"net/url"
 	"strings"
 	"time"
+
+	"github.com/fatih/color"
 )
 
 func NewProxy(target *url.URL) *httputil.ReverseProxy {
@@ -26,7 +28,12 @@ func ProxyRequestHandler(proxy *httputil.ReverseProxy, url *url.URL, endpoint st
 		path := r.URL.Path
 		r.URL.Path = strings.TrimPrefix(path, endpoint)
 
-		fmt.Printf("[ PROXY SERVER ] Proxying request to %s at %s\n", r.URL, time.Now().UTC())
+		proxyResp := fmt.Sprintf("[ PROXY SERVER ] Proxying request to %s at %s\n", r.URL, time.Now().UTC())
+
+		// lit := "[ PROXY SERVER ]"
+		// colorResp := color.Red(lit) + proxyResp
+		// fmt.Println(colorResp)
+		color.Red(proxyResp)
 
 		proxy.ServeHTTP(w, r)
 	}
